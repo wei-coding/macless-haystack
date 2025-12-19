@@ -85,7 +85,6 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
         run: |
           echo "   Pub Cache: ${{ steps.flutter-android-cache.outputs.cache-hit }}"
-          echo "   Android SDK: ${{ steps.android-sdk-cache.outputs.cache-hit }}"
           if [ "${{ steps.flutter-android-cache.outputs.cache-hit }}" != "true" ]; then
             flutter pub get
           fi
