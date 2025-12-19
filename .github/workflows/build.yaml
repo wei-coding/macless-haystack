@@ -62,20 +62,43 @@ jobs:
 #        with:
 #          release: '10-2020-q4'
 
-#      - uses: actions/setup-java@v3
-#        with:
-#          distribution: 'zulu'
-#          java-version: '17'
-#      - uses: subosito/flutter-action@v2
-#        with:
-#          cache: true
-#          channel: stable
-#      - name: Android Build
-#        working-directory: ./macless_haystack
-#        run: |
-#          flutter pub get
-#          flutter build apk --release --build-name=${{ env.VERSION }}
-#          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/android-application.apk
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          cache: false
+          channel: stable
+      - name: Cache Flutter for Android Build
+        uses: actions/cache@v5
+        id: flutter-android-cache
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+            ./macless_haystack/.dart_tool
+          key: flutter-android-${{ runner.os }}-${{ hashFiles('macless_haystack/pubspec.lock') }}
+      - name: Cache Android SDK
+        uses: actions/cache@v5
+        id: android-sdk-cache
+        with:
+          path: |
+            ~/android-sdk
+            ~/.android/cache
+          key: android-sdk-${{ runner.os }}
+      - name: Android Build
+        working-directory: ./macless_haystack
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
+        run: |
+          echo "   Pub Cache: ${{ steps.flutter-android-cache.outputs.cache-hit }}"
+          echo "   Android SDK: ${{ steps.android-sdk-cache.outputs.cache-hit }}"
+          if [ "${{ steps.flutter-android-cache.outputs.cache-hit }}" != "true" ]; then
+            flutter pub get
+          fi
+          flutter build apk --release --build-name=${{ env.VERSION }}
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/android-application.apk
 #      - name: Upload Android Artifacts
 #        uses: actions/upload-artifact@v4
 #        with:
