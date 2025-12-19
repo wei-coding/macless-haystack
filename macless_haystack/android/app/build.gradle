@@ -4,12 +4,6 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-//println("Flutter compileSdkVersion: ${flutter.compileSdkVersion}")
-//println("Flutter targetSdkVersion: ${flutter.targetSdkVersion}")
-//println("Flutter ndkVersion: ${flutter.ndkVersion}")
-//println("Flutter versionCode: ${flutter.versionCode}")
-//println("Flutter versionName: ${flutter.versionName}")
-
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
