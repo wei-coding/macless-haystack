@@ -111,8 +111,6 @@ jobs:
         run: |
           yes | flutter doctor --android-licenses
           flutter doctor -v
-          flutter clean
-          flutter pub get
           flutter build apk --release --build-name=${{ env.VERSION }}   
           mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/android-application.apk
       - name: Upload Android Artifacts
