@@ -164,6 +164,7 @@ jobs:
               echo "Using cached DEB file"
           fi        
           sudo dpkg -i /tmp/nrf-cache/nrf-command-line-tools_10.23.0_amd64.deb
+          echo "/opt/nordic/nrf-command-line-tools/bin" >> $GITHUB_PATH
       - name: Build NRF5x firmware
         run: |
           cd firmware/nrf5x/
